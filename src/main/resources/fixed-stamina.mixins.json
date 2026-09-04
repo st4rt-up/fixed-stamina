@@ -1,14 +1,20 @@
 {
-	"required": true,
-	"package": "fixed.stamina.mixin",
-	"compatibilityLevel": "JAVA_21",
-	"mixins": [
-		"ExampleMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
-	},
-	"overwrites": {
-		"requireAnnotations": true
+  "required": true,
+  "package": "com.fixed.stamina.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ConsumableMixin",
+    "FoodDataMixin",
+    "ItemMixin",
+    "LivingEntityMixin",
+    "PlayerListMixin",
+    "PlayerMixin",
+    "ServerPlayerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
 	}
 }

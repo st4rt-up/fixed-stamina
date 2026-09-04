@@ -5,22 +5,29 @@
 	"name": "fixed-stamina",
 	"description": "This is an example description! Tell everyone what your mod is about!",
 	"authors": [
-		"Me!"
+		"st4rt_up"
 	],
-	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
-	},
-	"license": "CC0-1.0",
+	"contact": {},
+	"license": "MIT",
 	"icon": "assets/fixed-stamina/icon.png",
 	"environment": "*",
 	"entrypoints": {
+        "client": [
+          "com.fixed.stamina.FixedStaminaClient"
+        ],
 		"main": [
-			"fixed.stamina.FixedStamina"
-		]
+          "com.fixed.stamina.FixedStamina"
+		],
+        "fabric-datagen": [
+          "com.fixed.stamina.docs.datagen.FixedStaminaDataGenerator"
+        ]
 	},
 	"mixins": [
-		"fixed-stamina.mixins.json"
+		"fixed-stamina.mixins.json",
+      {
+        "config": "fixed-stamina.client.mixins.json",
+        "environment": "client"
+      }
 	],
 	"depends": {
 		"fabricloader": ">=0.19.5",

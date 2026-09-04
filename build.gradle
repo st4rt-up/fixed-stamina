@@ -11,6 +11,16 @@ repositories {
 	// for more information about repositories.
 }
 
+loom {
+    splitEnvironmentSourceSets()
+    mods {
+        "fixed-stamina" {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
+        }
+    }
+}
+
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -32,6 +42,12 @@ processResources {
 
 tasks.withType(JavaCompile).configureEach {
 	it.options.release = 21
+}
+
+fabricApi {
+    configureDataGeneration() {
+        client = true
+    }
 }
 
 java {
