@@ -1,0 +1,4 @@
+// 1.21.11	-999999999-01-01T00:00:00	fixed-stamina/Tags for minecraft:item
+3e7f77a2c6eb9afcf001b87dd8ee7a8f3d816845 data/fixed-stamina/tags/item/bad_foods.json
+4c5470d661b3828e2cea25d9ae72777eef027c1f data/fixed-stamina/tags/item/meat/cooked.json
+d9a48e53ec009270cab6f7b4006808bb8a2efcdd data/fixed-stamina/tags/item/meat/raw.json

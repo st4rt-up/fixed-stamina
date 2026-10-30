@@ -1,0 +1,14 @@
+{
+  "fixed-stamina.eat_time_scaling": "Eating Time Scaling",
+  "fixed-stamina.initial_eat_time": "Initial Eat Time",
+  "fixed-stamina.respawn_health_percentage": "Respawn Health Percentage",
+  "fixed-stamina.respawn_hunger_percentage": "Respawn Hunger Percentage",
+  "fixed-stamina.respawn_xp_percentage": "Respawn Experience Percentage",
+  "fixed-stamina.stamina_drain_speed": "Stamina Drain Speed",
+  "gamerule.fixed-stamina.eat_time_scaling": "Additional time to eat food per hunger restored (in ticks)",
+  "gamerule.fixed-stamina.initial_eat_time": "Base time for eating food (in ticks)",
+  "gamerule.fixed-stamina.respawn_health_percentage": "Percentage of health players spawn with",
+  "gamerule.fixed-stamina.respawn_hunger_percentage": "Percentage of hunger players spawn with",
+  "gamerule.fixed-stamina.respawn_xp_percentage": "Percentage of experience players spawn with",
+  "gamerule.fixed-stamina.stamina_drain_speed": "How fast stamina drains"
+}

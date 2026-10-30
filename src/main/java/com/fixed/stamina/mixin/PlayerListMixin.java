@@ -8,6 +8,7 @@ import net.minecraft.server.players.PlayerList;
 import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.level.gamerules.GameRules;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -43,8 +44,13 @@ public class PlayerListMixin
 
 
         float xpMultiplier = xpGamerule != 0 ? ((float) xpGamerule / 100.0f) : defaultDifficultyMultiplier;
-        player.experienceLevel *= xpMultiplier;
-        player.experienceProgress *= xpMultiplier;
+
+        boolean keepInventoryOn = server.getGameRules().get(GameRules.KEEP_INVENTORY);
+        if (keepInventoryOn) {
+            player.experienceLevel *= xpMultiplier;
+            player.experienceProgress *= xpMultiplier;
+        }
+
 
         float healthMultiplier = healthGamerule != 0 ? (float) healthGamerule / 100.0f : defaultDifficultyMultiplier;
         return player.getHealth() * healthMultiplier;

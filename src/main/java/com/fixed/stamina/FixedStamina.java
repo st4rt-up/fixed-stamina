@@ -17,7 +17,7 @@ public class FixedStamina implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-        LOGGER.info("Initializing " + MOD_ID);
+        LOGGER.info("Initializing mod" + MOD_ID);
 
 
         GameruleRegistry.register();

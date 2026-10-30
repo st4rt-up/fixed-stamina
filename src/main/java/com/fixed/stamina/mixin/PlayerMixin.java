@@ -17,7 +17,7 @@ public class PlayerMixin implements EatTimeGameruleAccessor {
     int initial_eat_time = 10;
     int eat_time_scaling = 6;
 
-    
+
     public void setInitialEatTime_stamina(int initial) { initial_eat_time =  initial; }
     public int getInitialEatTime_stamina() { return initial_eat_time; }
     public void setEatTimeScaling_stamina(int scaling) { eat_time_scaling =  scaling; }
@@ -25,13 +25,11 @@ public class PlayerMixin implements EatTimeGameruleAccessor {
 
     @ModifyVariable(method = "causeFoodExhaustion", at = @At(value = "HEAD"), argsOnly = true)
     private float exhaustionGamerule(float value) {
-        Player PE = (Player)(Object) this;
+        Player player = (Player)(Object) this;
+        if (player.level().isClientSide()) return value;
 
-        if (!PE.level().isClientSide()) {
-            ServerLevel server = (ServerLevel) PE.level();
-            return value * server.getGameRules().get(GameruleRegistry.STAMINA_DRAIN_SPEED) / 100f;
-        }
-        return value;
+        ServerLevel server = (ServerLevel) player.level();
+        return value * server.getGameRules().get(GameruleRegistry.STAMINA_DRAIN_SPEED) / 100f;
     }
 
     @Redirect(method = "causeExtraKnockback", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;setSprinting(Z)V"))
@@ -39,8 +37,8 @@ public class PlayerMixin implements EatTimeGameruleAccessor {
 
     @Inject(method = "canEat", at = @At("HEAD"), cancellable = true)
     private void alwaysEatInPeaceful(boolean ignoreHunger, CallbackInfoReturnable<Boolean> cir) {
-        Player PE = (Player)(Object) this;
-        boolean isPeacefulMode = PE.level().getDifficulty().getId()==0;
+        Player player = (Player)(Object) this;
+        boolean isPeacefulMode = player.level().getDifficulty().getId()==0;
         if (isPeacefulMode) cir.setReturnValue(true);
     }
 

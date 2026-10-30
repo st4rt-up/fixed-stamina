@@ -1,6 +1,7 @@
 package com.fixed.stamina.mixin;
 
 import com.fixed.stamina.CustomData;
+import com.fixed.stamina.attachments.Stamina;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -60,8 +61,8 @@ public abstract class FoodDataMixin {
 
         int staminaPause = 20;
         boolean shouldIncrementExhaustion =
-                Math.abs(this.exhaustionLevel - lastExhaustion) >= 0.001f &&
-                        ticksSinceLastExhaustion >= 0;
+                Math.abs(this.exhaustionLevel - lastExhaustion) >= 0.001f
+                && ticksSinceLastExhaustion >= 0;
 
         if (shouldIncrementExhaustion) {
             ticksSinceLastExhaustion = 0;
@@ -69,12 +70,17 @@ public abstract class FoodDataMixin {
         } else if (saturationLevel != 0 || player.level().getGameTime() % 3 == 0)
             ticksSinceLastExhaustion = Math.min(ticksSinceLastExhaustion + 1, staminaPause);
 
-        if (player.hurtTime > 0) {ticksSinceLastExhaustion = 0;}
+        if (player.hurtTime > 0) { ticksSinceLastExhaustion = 0; }
 
-        if (this.saturationLevel < this.foodLevel && ticksSinceLastExhaustion == staminaPause) {
+        if (
+            this.saturationLevel < this.foodLevel
+            && ticksSinceLastExhaustion == staminaPause
+        ) {
             float h = 0.03f + this.saturationLevel / 100.0f;
             this.saturationLevel = Math.min(this.saturationLevel + h, this.foodLevel);
+
             saturationSinceLastHunger += h;
+
             if (saturationSinceLastHunger >= 8) {
                 saturationSinceLastHunger = 0.0f;
                 this.foodLevel--;
@@ -82,9 +88,9 @@ public abstract class FoodDataMixin {
         }
 
         boolean shouldClampSaturationEffect =
-                player.hasEffect(MobEffects.SATURATION)
-                        && player.getEffect(MobEffects.SATURATION).getAmplifier() > 0
-                        && this.saturationLevel <= 1;
+            player.hasEffect(MobEffects.SATURATION)
+            && player.getEffect(MobEffects.SATURATION).getAmplifier() > 0
+            && this.saturationLevel <= 1;
 
         if (shouldClampSaturationEffect) {
             this.saturationLevel = 1;
@@ -93,37 +99,38 @@ public abstract class FoodDataMixin {
 
         boolean ranOutOfStamina = (saturationLevel == 0);
         if (ranOutOfStamina) {
-            player.addEffect(new MobEffectInstance(MobEffects.MINING_FATIGUE, 10, 99, true, false, true));
-            player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 10, 99, true, false, true));
-            if (player.isBlocking()) player.releaseUsingItem();
-            player.getCooldowns().addCooldown(Items.SHIELD.getDefaultInstance(), 30);
+            Stamina.applyNoStaminaEffects(player);
         }
 
-        CustomData.setData(player, "lastExhaustion", (int)(lastExhaustion * 1000));
+        CustomData.setData(player, "lastExhaustion", (int) (lastExhaustion * 1000));
         CustomData.setData(player, "ticksSinceLastExhaustion", ticksSinceLastExhaustion);
-        CustomData.setData(player, "saturationSinceLastHunger", (int)(saturationSinceLastHunger * 1000));
+        CustomData.setData(player, "saturationSinceLastHunger", (int) (saturationSinceLastHunger * 1000));
     }
 
     @ModifyConstant(method = "tick", constant = @Constant(floatValue = 4.0f))
     private float lessExhaustion(float value) {
         return 0.5f;
     }
+
     @ModifyConstant(method = "tick", constant = @Constant(floatValue = 1.0f, ordinal = 0))
     private float lessStaminaCost(float value) {
         return 0.5f;
     }
+
     @ModifyConstant(method = "tick", constant = @Constant(intValue = 20))
     private int noQuickHeal(int value) {
         return 20000;
     }
+
     @ModifyConstant(method = "tick", constant = @Constant(intValue = 18))
     private int dontNeedHungerToHeal(int value) {
         return 0;
     }
+
     @ModifyConstant(method = "tick", constant = @Constant(intValue = 80))
     private int fasterHeal(int value, @Local(argsOnly = true) ServerPlayer player) {
-        FoodData HM = (FoodData) (Object)this;
-        if (HM.getFoodLevel()==0) return 80;
+        FoodData HM = (FoodData) (Object) this;
+        if (HM.getFoodLevel() == 0) return 80;
         return 20;
     }
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayer;isHurt()Z"))
@@ -139,8 +146,8 @@ public abstract class FoodDataMixin {
     }
 
     @Inject(method = "hasEnoughFood", at = @At("HEAD"), cancellable = true)
-    private void cancelSprintAt0Saturation(CallbackInfoReturnable<Boolean> cir) {
-        FoodData HM = (FoodData) (Object)this;
+    private void cancelSprintAtZeroSaturation(CallbackInfoReturnable<Boolean> cir) {
+        FoodData HM = (FoodData) (Object) this;
         cir.setReturnValue(HM.getSaturationLevel() > 0.0F);
     }
 
